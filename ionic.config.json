@@ -1,0 +1,7 @@
+{
+  "name": "Ionic--asistencia-geolocalizada",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
