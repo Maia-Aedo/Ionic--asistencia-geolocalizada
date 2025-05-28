@@ -1,20 +1,41 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>
-      Blank
+      Its Asistencia
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-item *ngFor="let student of students">
+      <ion-avatar slot="start">
+        <img [src]="student.avatar" alt="La imagen del estudiante">
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ student.lastName }}, {{ student.firstName }}</h2>
+      </ion-label>
+      <ion-checkbox slot="end" [(ngModel)]="student.present" color="secondary"></ion-checkbox>
+    </ion-item>
+  </ion-list>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+  <ion-button expand="block" color="success" (click)="guardarAsistencia()" class="buttonGuardar">
+    Guardar
+  </ion-button>
+
+  <ion-list>
+    <ion-item *ngFor="let student of students">
+      <ion-avatar slot="start">
+        <img [src]="student.avatar" alt="{{student.firstName}}">
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ student.lastName }}, {{ student.firstName }}</h2>
+      </ion-label>
+      <ion-checkbox slot="end" [(ngModel)]="student.present" color="secondary"></ion-checkbox>
+    </ion-item>
+  </ion-list>
+
+  <ion-button expand="block" color="success" (click)="guardarAsistencia()" class="buttonGuardar">
+    Guardar
+  </ion-button>
 </ion-content>
