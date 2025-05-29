@@ -1,0 +1,41 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>
+      Its Asistencia
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-item *ngFor="let student of students">
+      <ion-avatar slot="start">
+        <img [src]="student.avatar" alt="La imagen del estudiante">
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ student.lastName }}, {{ student.firstName }}</h2>
+      </ion-label>
+      <ion-checkbox slot="end" [(ngModel)]="student.present" color="secondary"></ion-checkbox>
+    </ion-item>
+  </ion-list>
+
+  <ion-button expand="block" color="success" (click)="guardarAsistencia()" class="buttonGuardar">
+    Guardar
+  </ion-button>
+
+  <ion-list>
+    <ion-item *ngFor="let student of students">
+      <ion-avatar slot="start">
+        <img [src]="student.avatar" alt="{{student.firstName}}">
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ student.lastName }}, {{ student.firstName }}</h2>
+      </ion-label>
+      <ion-checkbox slot="end" [(ngModel)]="student.present" color="secondary"></ion-checkbox>
+    </ion-item>
+  </ion-list>
+
+  <ion-button expand="block" color="success" (click)="guardarAsistencia()" class="buttonGuardar">
+    Guardar
+  </ion-button>
+</ion-content>
