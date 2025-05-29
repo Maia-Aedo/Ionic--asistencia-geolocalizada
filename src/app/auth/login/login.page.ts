@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
-import { NavController, AlertController, IonHeader, IonToolbar, IonTitle, IonInput, IonLabel, IonItem, IonContent, IonicModule } from '@ionic/angular';
+import { NavController, AlertController, IonicModule } from '@ionic/angular';
 
 @NgModule({
   declarations: [],
