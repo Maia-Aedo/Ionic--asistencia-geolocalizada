@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { getAuth, User } from 'firebase/auth';
 
 @Injectable({ providedIn: 'root' })
 
 export class AuthService {
-  constructor(private afAuth: AngularFireAuth) {}
+  constructor(private afAuth: AngularFireAuth) { }
 
   /**
    * 
@@ -27,4 +28,10 @@ export class AuthService {
   getAuthState() {
     return this.afAuth.authState;
   }
+
+  async getCurrentUser(): Promise<User | null> {
+    const auth = getAuth();
+    return auth.currentUser;
+  }
+
 } 
