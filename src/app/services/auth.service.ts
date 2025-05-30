@@ -1,32 +1,30 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { tap } from 'rxjs';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 
 export class AuthService {
+  constructor(private afAuth: AngularFireAuth) {}
 
-  private baseUrl="http://localhost:3000/api";
+  /**
+   * 
+   * @description fn de autenticación utilizando métodos de firebase auth
+   */
 
-  constructor(private http: HttpClient) { }
-
-  login(credenciales: {email:string, password:string}){
-    return this.http.post(`${this.baseUrl}/auth/login`, credenciales)
-    .pipe(
-      tap((resp:any)=>{
-        this.setToken(resp.token)
-      })
-    )
+  register(email: string, password: string): Promise<any> {
+    return this.afAuth.createUserWithEmailAndPassword(email, password);
   }
 
-  register(data: { nombre: string; email: string; password: string }) {
-    return this.http.post(`${this.baseUrl}/auth/register`, data);
+  login(email: string, password: string): Promise<any> {
+    return this.afAuth.signInWithEmailAndPassword(email, password);
   }
 
-  private setToken(token:string){
-    localStorage.setItem('token', token);
+  logout(): Promise<void> {
+    return this.afAuth.signOut();
   }
-  
-}
+
+  // Obtiene estado de autenticación
+  getAuthState() {
+    return this.afAuth.authState;
+  }
+} 

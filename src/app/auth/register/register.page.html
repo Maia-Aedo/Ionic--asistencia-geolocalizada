@@ -1,27 +1,32 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>Registro</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
-    <ion-item>
-      <ion-label position="floating">Nombre</ion-label>
-      <ion-input formControlName="nombre" type="text"></ion-input>
-    </ion-item>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Crear cuenta</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="floating">Correo electrónico</ion-label>
+        <ion-input type="email" [(ngModel)]="email"></ion-input>
+      </ion-item>
 
-    <ion-item>
-      <ion-label position="floating">Correo</ion-label>
-      <ion-input formControlName="email" type="email"></ion-input>
-    </ion-item>
+      <ion-item>
+        <ion-label position="floating">Contraseña</ion-label>
+        <ion-input type="password" [(ngModel)]="password"></ion-input>
+      </ion-item>
 
-    <ion-item>
-      <ion-label position="floating">Contraseña</ion-label>
-      <ion-input formControlName="password" type="password"></ion-input>
-    </ion-item>
+      <ion-item>
+        <ion-label position="floating">Confirmar contraseña</ion-label>
+        <ion-input type="password" [(ngModel)]="confirmPassword"></ion-input>
+      </ion-item>
 
-    <ion-button expand="full" type="submit">Registrarse</ion-button>
-    <ion-button fill="clear" routerLink="/auth/login">¿Ya tienes cuenta?</ion-button>
-  </form>
+      <ion-button expand="block" (click)="register()" class="ion-margin-top">Registrarse</ion-button>
+      <ion-button expand="block" fill="clear" (click)="loggear()">Ya tengo una cuenta</ion-button>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

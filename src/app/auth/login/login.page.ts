@@ -1,43 +1,48 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
-import { NavController, AlertController, IonicModule } from '@ionic/angular';
+import { AuthService } from 'src/app/services/auth.service';
+import { NavController, ToastController, LoadingController } from '@ionic/angular';
+import { NgForm } from '@angular/forms';
 
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
-    FormsModule,
-    IonicModule,
+    ToastController,
+    LoadingController
   ]
 })
 
 export class LoginPage {
-  loginForm: FormGroup;
+  credentials = {
+    email: '',
+    password: ''
+  };
 
   constructor(
-    private fb: FormBuilder,
+    private authService: AuthService,
     private navCtrl: NavController,
-    private alertCtrl: AlertController
-  ) {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
-    });
+    private toastCtrl: ToastController,
+    private loadingCtrl: LoadingController
+  ) { }
+
+  async login(form: NgForm) {
+    if (!form.valid) return;
+    const loading = await this.loadingCtrl.create({ message: 'Iniciando sesión...' });
+    await loading.present();
+    try {
+      await this.authService.login(this.credentials.email, this.credentials.password);
+      loading.dismiss();
+      this.navCtrl.navigateRoot('/home');
+    } catch (error) {
+      loading.dismiss();
+      const toast = await this.toastCtrl.create({ message: 'Error de login', duration: 2000, color: 'danger' });
+      toast.present();
+    }
   }
 
-  async onLogin() {
-    const { email, password } = this.loginForm.value;
-    // Simulación login
-    if (email === 'test@example.com' && password === '123456') {
-      this.navCtrl.navigateRoot('/home');
-    } else {
-      const alert = await this.alertCtrl.create({
-        header: 'Error',
-        message: 'Credenciales inválidas',
-        buttons: ['OK']
-      });
-      alert.present();
-    }
+  // Redirije a registro
+  registrarme() {
+    this.navCtrl.navigateForward('/register');
   }
 }

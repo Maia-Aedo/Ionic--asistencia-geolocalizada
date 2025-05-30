@@ -1,58 +1,58 @@
-import { Component, NgModule } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { AuthService } from '../auth.service';
-
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { IonicModule, NavController, AlertController } from '@ionic/angular';
+import { AuthService } from 'src/app/services/auth.service';
+import { NavController, ToastController, LoadingController } from '@ionic/angular';
+import { NgForm } from '@angular/forms';
 
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
     FormsModule,
-    IonicModule,
+    NavController,
+    ToastController,
+    LoadingController
   ]
 })
 
 export class RegisterPage {
-  registerForm: FormGroup;
+  data = {
+    email: '',
+    password: '',
+    confirmPassword: ''
+  };
 
   constructor(
-    private fb: FormBuilder,
     private authService: AuthService,
     private navCtrl: NavController,
-    private alertCtrl: AlertController
-  ) {
-    this.registerForm = this.fb.group({
-      nombre: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-    });
+    private toastCtrl: ToastController,
+    private loadingCtrl: LoadingController
+  ) { }
+
+  async register(form: NgForm) {
+    if (!form.valid || this.data.password !== this.data.confirmPassword) {
+      const toast = await this.toastCtrl.create({ message: 'Revisa tus datos', duration: 2000, color: 'warning' });
+      return toast.present();
+    }
+
+    const loading = await this.loadingCtrl.create({ message: 'Registrando usuario...' });
+    await loading.present();
+    try {
+      await this.authService.register(this.data.email, this.data.password);
+      loading.dismiss();
+      const toast = await this.toastCtrl.create({ message: 'Registro exitoso', duration: 2000, color: 'success' });
+      toast.present();
+      this.navCtrl.navigateRoot('/home');
+    } catch (error) {
+      loading.dismiss();
+      const toast = await this.toastCtrl.create({ message: 'Error al registrar', duration: 2000, color: 'danger' });
+      toast.present();
+    }
   }
-  
-  async onRegister() {
-    const { nombre, email, password } = this.registerForm.value;
-  
-    this.authService.register({ nombre, email, password }).subscribe({
-      next: async () => {
-        const alert = await this.alertCtrl.create({
-          header: 'Éxito',
-          message: 'Usuario registrado correctamente',
-          buttons: ['OK']
-        });
-        await alert.present();
-        this.navCtrl.navigateRoot('/auth/login');
-      },
-      error: async (error: any) => {
-        const alert = await this.alertCtrl.create({
-          header: 'Error',
-          message: error.error?.message || 'No se pudo registrar el usuario',
-          buttons: ['OK']
-        });
-        await alert.present();
-      }
-    });
+
+  // Redirije a login
+  loggear() {
+    this.navCtrl.navigateBack('/login');
   }
-  
 }
