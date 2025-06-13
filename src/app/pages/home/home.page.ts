@@ -1,17 +1,12 @@
-import { Component, NgModule } from '@angular/core';
+import { Component } from '@angular/core';
 import { Student } from '../../shared/interfaces/Student.interface';
 import { Geolocation } from '@capacitor/geolocation';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
 
-@NgModule({
-  declarations: [],
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-  ]
+@Component({
+  selector: 'app-home',
+  templateUrl: './home.page.html',
+  styleUrls: ['./home.page.scss'],
+  standalone: false
 })
 
 export class HomePage {

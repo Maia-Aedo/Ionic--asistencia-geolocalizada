@@ -1,16 +1,13 @@
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { NavController, ToastController, LoadingController } from '@ionic/angular';
 import { NgForm } from '@angular/forms';
 
-@NgModule({
-  declarations: [],
-  imports: [
-    CommonModule,
-    ToastController,
-    LoadingController
-  ]
+@Component({
+  selector: 'app-login',
+  templateUrl: './login.page.html',
+  styleUrls: ['./login.page.scss'],
+  standalone: false
 })
 
 export class LoginPage {

@@ -5,8 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { AsistenciaPageRoutingModule } from './asistencia-routing.module';
-
 import { AsistenciaPage } from './asistencia.page';
+
 
 @NgModule({
   imports: [
@@ -15,6 +15,6 @@ import { AsistenciaPage } from './asistencia.page';
     IonicModule,
     AsistenciaPageRoutingModule
   ],
-  declarations: [AsistenciaPage]
+  declarations: [ AsistenciaPage ]
 })
 export class AsistenciaPageModule {}
