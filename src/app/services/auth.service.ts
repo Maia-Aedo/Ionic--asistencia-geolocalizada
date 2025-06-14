@@ -29,9 +29,16 @@ export class AuthService {
     return this.afAuth.authState;
   }
 
-  async getCurrentUser(): Promise<User | null> {
-    const auth = getAuth();
-    return auth.currentUser;
+  async getCurrentUser(): Promise<any | null> {
+    return new Promise((resolve, reject) => {
+      this.afAuth.onAuthStateChanged(user => {
+        if (user) {
+          resolve(user);
+        } else {
+          resolve(null);
+        }
+      });
+    });
   }
 
 } 

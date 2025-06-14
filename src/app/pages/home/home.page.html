@@ -1,41 +1,57 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar color="primary">
-    <ion-title>
-      ITS Asistencia
-    </ion-title>
+    <ion-title>Registrar Asistencia</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()" color="light">
+        <ion-icon name="log-out-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-list>
-    <ion-item *ngFor="let student of students">
-      <ion-avatar slot="start">
-        <img [src]="student.avatar" alt="La imagen del estudiante">
-      </ion-avatar>
-      <ion-label>
-        <h2>{{ student.lastName }}, {{ student.firstName }}</h2>
-      </ion-label>
-      <ion-checkbox slot="end" [(ngModel)]="student.present" color="secondary"></ion-checkbox>
-    </ion-item>
-  </ion-list>
 
-  <ion-button expand="block" color="success" (click)="guardarAsistencia()" class="buttonGuardar">
-    Guardar
-  </ion-button>
+  <!-- Icono de calendario -->
+  <div class="centered-icon">
+    <ion-icon name="calendar-outline" size="large" color="primary"></ion-icon>
+  </div>
 
-  <ion-list>
-    <ion-item *ngFor="let student of students">
-      <ion-avatar slot="start">
-        <img [src]="student.avatar" alt="{{student.firstName}}">
-      </ion-avatar>
-      <ion-label>
-        <h2>{{ student.lastName }}, {{ student.firstName }}</h2>
-      </ion-label>
-      <ion-checkbox slot="end" [(ngModel)]="student.present" color="secondary"></ion-checkbox>
-    </ion-item>
-  </ion-list>
+  <!-- Instrucciones -->
+  <ion-text color="medium">
+    <h2 class="ion-text-center">Seleccioná una acción</h2>
+    <p class="ion-text-center">
+      Asegúrate de estar dentro de la zona de trabajo y permitir acceso a la cámara y geolocalización.
+    </p>
+  </ion-text>
 
-  <ion-button expand="block" color="success" (click)="guardarAsistencia()" class="buttonGuardar">
-    Guardar
-  </ion-button>
+  <!-- Botones de acción -->
+  <div class="action-buttons">
+    <ion-button expand="block" color="success" (click)="registrarAsistencia('entrada')">
+      <ion-icon name="log-in-outline" slot="start"></ion-icon>
+      Registrar Entrada
+    </ion-button>
+
+    <ion-button expand="block" color="danger" (click)="registrarAsistencia('salida')">
+      <ion-icon name="log-out-outline" slot="start"></ion-icon>
+      Registrar Salida
+    </ion-button>
+  </div>
+
+  <!-- Mensaje de éxito -->
+  <div *ngIf="mensajeExito" class="mensaje-exito ion-text-center">
+    <ion-text color="success">
+      <h3>¡Asistencia registrada con éxito!</h3>
+    </ion-text>
+    <ion-button color="primary" (click)="irAlHistorial()">
+      Ver Historial
+    </ion-button>
+  </div>
+
+  <!-- Nota final -->
+  <ion-text color="medium">
+    <p class="ion-text-center note">
+      Tu ubicación y una foto serán requeridas para validar tu asistencia.
+    </p>
+  </ion-text>
+
 </ion-content>

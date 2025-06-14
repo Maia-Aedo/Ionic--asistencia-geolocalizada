@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
-import { Student } from '../../shared/interfaces/Student.interface';
+import { NavController } from '@ionic/angular';
+import { AsistenciaService } from 'src/app/services/asistencia.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { Asistencia } from '../../shared/interfaces/asistencia.interface';
+import { ToastController } from '@ionic/angular';
 import { Geolocation } from '@capacitor/geolocation';
 
 @Component({
@@ -8,63 +12,75 @@ import { Geolocation } from '@capacitor/geolocation';
   styleUrls: ['./home.page.scss'],
   standalone: false
 })
-
 export class HomePage {
+  mensajeExito = false;
 
-  public actionSheetButtons = [
-    {
-      text: 'Ausente',
-      role: 'destructive',
-      data:{
-        action: 'delete'
-      },
-      icon: 'trash',
-    },
-    {
-      text: 'Presente',
-      role: 'present',
-      data:{
-        action: 'present'
-      },
-      icon: 'checkmark',
-    },
-    {
-      text:'Tarde',
-      role: 'late',
-      data:{
-        action: 'late'
-      },
-      icon: 'time',
-    },
-    {
-      text:'Cancelar',
-      role: 'cancel',
-      icon: 'close',
-      data: {
-        action: 'cancel'
-      }
+  constructor(
+    private navCtrl: NavController,
+    private asistenciaService: AsistenciaService,
+    private authService: AuthService,
+    private toastCtrl: ToastController
+  ) { }
+
+  async registrarAsistencia(tipo: 'entrada' | 'salida') {
+    const permitido = await this.asistenciaService.validarUbicacion();
+    if (!permitido) {
+      this.mostrarToast('No estás dentro del área permitida', 'danger');
+      return;
     }
-  ]
 
-  students: Student[] = [
-    { firstName: 'Juan', lastName: 'Pérez', avatar: 'https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg', present: false },
-    { firstName: 'María', lastName: 'García', avatar: 'https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-173524.jpg', present: false },
-    { firstName: 'Carlos', lastName: 'Ramírez', avatar: 'https://img.freepik.com/free-vector/smiling-redhaired-cartoon-boy_1308-174709.jpg?semt=ais_hybrid', present: false },
-    { firstName: 'Ana', lastName: 'Sánchez', avatar: 'https://img.freepik.com/free-vector/blonde-boy-blue-hoodie_1308-175828.jpg', present: false },
-  ];
+    try {
+      // Toma foto
+      const fotoBase64 = await this.asistenciaService.tomarFoto();
 
-  constructor() {}
+      // Obtiene el user
+      const user = await this.authService.getCurrentUser();
+      if (!user) throw new Error('Usuario no autenticado');
 
-  guardarAsistencia() {
-    console.log('Asistencia guardada:', this.students);
+      // Registramos la ubicación actual
+      const position = await Geolocation.getCurrentPosition();
+      const ubicacion = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+
+      // Creamos obj de asistencia(interface)
+      const nuevaAsistencia: Asistencia = {
+        userId: user.uid,
+        tipo,
+        timestamp: new Date(),
+        ubicacion,
+        foto: fotoBase64 // Guardamos la foto
+      };
+
+      // Registrar en Firestore
+      await this.asistenciaService.registrarAsistencia(nuevaAsistencia);
+      this.mensajeExito = true;
+      this.mostrarToast('✅ Asistencia registrada con éxito', 'success');
+
+    } catch (error: any) {
+      console.error('Error al registrar asistencia:', error);
+      this.mostrarToast(`Hubo un problema: ${error.message || 'Inténtalo más tarde'}`, 'danger');
+    }
   }
 
-  async obtenerUbicacion() {
-    const position = await Geolocation.getCurrentPosition();
-    return {
-      lat: position.coords.latitude,
-      lng: position.coords.longitude
-    };
+  irAlHistorial() {
+    this.navCtrl.navigateForward('/historial');
   }
 
+  logout() {
+    this.authService.logout().then(() => {
+      this.navCtrl.navigateRoot('/login');
+    });
+  }
+
+  async mostrarToast(mensaje: string, color: string) {
+    const toast = await this.toastCtrl.create({
+      message: mensaje,
+      duration: 3000,
+      color: color,
+      position: 'bottom'
+    });
+    await toast.present();
+  }
 }
