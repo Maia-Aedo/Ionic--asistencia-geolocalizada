@@ -39,8 +39,15 @@ Aplicación móvil desarrollada con **Ionic + Angular**, que permite a usuarios 
 
 ---
 
-## Estado del proyecto
+## 📌 Estado del proyecto
 
 - Funcional.
 - Testeado en navegador y android físico.
 - Manejo de errores.
+
+---
+
+## 📎 Adjuntos
+
+- [Documento Técnico](https://docs.google.com/document/d/1KverDAb9s7zrpLnXpvA4gJDSX-cWW1K110fRYb3LRr8/edit?usp=sharing)
+- [Vídeo Tutorial]()
