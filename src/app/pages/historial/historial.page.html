@@ -27,8 +27,8 @@
       <ion-label>
         <h2>{{ registro.tipo === 'entrada' ? 'Entrada' : 'Salida' }}</h2>
         <h3>{{ registro.timestamp | date:'short' }}</h3>
-        <p *ngIf="registro.ubicacion">
-          {{ registro.ubicacion.lat.toFixed(5) }}, {{ registro.ubicacion.lng.toFixed(5) }}
+        <p *ngIf="registro.ubicacion?.lat != null && registro.ubicacion?.lng != null">
+          {{ registro.ubicacion?.lat?.toFixed(5) }}, {{ registro.ubicacion?.lng?.toFixed(5) }}
         </p>
       </ion-label>
       <ion-badge slot="end" color="{{ registro.tipo === 'entrada' ? 'success' : 'danger' }}">

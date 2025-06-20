@@ -1,11 +1,19 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { getAuth, User } from 'firebase/auth';
+import { BehaviorSubject } from 'rxjs';
+import firebase from 'firebase/compat/app';
 
 @Injectable({ providedIn: 'root' })
 
 export class AuthService {
-  constructor(private afAuth: AngularFireAuth) { }
+  private currentUserSubject = new BehaviorSubject<firebase.User | null>(null);
+  currentUser$ = this.currentUserSubject.asObservable();
+
+  constructor(private afAuth: AngularFireAuth) {
+    this.afAuth.authState.subscribe(user => {
+      this.currentUserSubject.next(user);
+    });
+  }
 
   /**
    * 
@@ -20,7 +28,7 @@ export class AuthService {
     return this.afAuth.signInWithEmailAndPassword(email, password);
   }
 
-  logout(): Promise<void> {
+  logout() {
     return this.afAuth.signOut();
   }
 
@@ -29,16 +37,8 @@ export class AuthService {
     return this.afAuth.authState;
   }
 
-  async getCurrentUser(): Promise<any | null> {
-    return new Promise((resolve, reject) => {
-      this.afAuth.onAuthStateChanged(user => {
-        if (user) {
-          resolve(user);
-        } else {
-          resolve(null);
-        }
-      });
-    });
+  getCurrentUser() {
+    return this.afAuth.currentUser;
   }
 
 } 

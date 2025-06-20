@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { AsistenciaService } from 'src/app/services/asistencia.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -19,49 +19,90 @@ export class HomePage {
     private navCtrl: NavController,
     private asistenciaService: AsistenciaService,
     private authService: AuthService,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private ngZone: NgZone
   ) { }
 
+  // async registrarAsistencia(tipo: 'entrada' | 'salida') {
+  //   const permitido = await this.asistenciaService.validarUbicacion();
+  //   if (!permitido) {
+  //     this.mostrarToast('No estás dentro del área permitida', 'danger');
+  //     return;
+  //   }
+
+  //   try {
+  //     // Toma foto
+  //     const fotoBase64 = await this.asistenciaService.tomarFoto();
+
+  //     // Obtiene el user
+  //     const user = await this.authService.getCurrentUser();
+  //     if (!user) throw new Error('Usuario no autenticado');
+
+  //     // Registramos la ubicación actual
+  //     const position = await Geolocation.getCurrentPosition();
+  //     const ubicacion = {
+  //       lat: position.coords.latitude,
+  //       lng: position.coords.longitude
+  //     };
+
+  //     // Creamos obj de asistencia(interface)
+  //     const nuevaAsistencia: Asistencia = {
+  //       userId: user.uid,
+  //       tipo,
+  //       timestamp: new Date(),
+  //       ubicacion,
+  //       foto: fotoBase64 // Guardamos la foto
+  //     };
+
+  //     // Registrar en Firestore
+  //     await this.asistenciaService.registrarAsistencia(nuevaAsistencia);
+  //     this.mensajeExito = true;
+  //     this.mostrarToast('✅ Asistencia registrada con éxito', 'success');
+
+  //   } catch (error: any) {
+  //     console.error('Error al registrar asistencia:', error);
+  //     this.mostrarToast(`Hubo un problema: ${error.message || 'Inténtalo más tarde'}`, 'danger');
+  //   }
+  // }
+
   async registrarAsistencia(tipo: 'entrada' | 'salida') {
-    const permitido = await this.asistenciaService.validarUbicacion();
-    if (!permitido) {
-      this.mostrarToast('No estás dentro del área permitida', 'danger');
-      return;
-    }
+    this.ngZone.run(async () => {
+      const permitido = await this.asistenciaService.validarUbicacion();
+      if (!permitido) {
+        this.mostrarToast('No estás dentro del área permitida', 'danger');
+        return;
+      }
 
-    try {
-      // Toma foto
-      const fotoBase64 = await this.asistenciaService.tomarFoto();
+      try {
+        const fotoBase64 = await this.asistenciaService.tomarFoto();
 
-      // Obtiene el user
-      const user = await this.authService.getCurrentUser();
-      if (!user) throw new Error('Usuario no autenticado');
+        const user = await this.authService.getCurrentUser();
+        if (!user) throw new Error('Usuario no autenticado');
 
-      // Registramos la ubicación actual
-      const position = await Geolocation.getCurrentPosition();
-      const ubicacion = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      };
+        const position = await Geolocation.getCurrentPosition();
+        const ubicacion = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
 
-      // Creamos obj de asistencia(interface)
-      const nuevaAsistencia: Asistencia = {
-        userId: user.uid,
-        tipo,
-        timestamp: new Date(),
-        ubicacion,
-        foto: fotoBase64 // Guardamos la foto
-      };
+        const nuevaAsistencia: Asistencia = {
+          userId: user.uid,
+          tipo,
+          timestamp: new Date(),
+          ubicacion,
+          foto: fotoBase64
+        };
+        
 
-      // Registrar en Firestore
-      await this.asistenciaService.registrarAsistencia(nuevaAsistencia);
-      this.mensajeExito = true;
-      this.mostrarToast('✅ Asistencia registrada con éxito', 'success');
+        await this.asistenciaService.registrarAsistencia(nuevaAsistencia);
+        this.mensajeExito = true;
+        this.mostrarToast('✅ Asistencia registrada con éxito', 'success');
 
-    } catch (error: any) {
-      console.error('Error al registrar asistencia:', error);
-      this.mostrarToast(`Hubo un problema: ${error.message || 'Inténtalo más tarde'}`, 'danger');
-    }
+      } catch (error: any) {
+        console.error('Error al registrar asistencia:', error);
+        this.mostrarToast(`Hubo un problema: ${error.message || 'Inténtalo más tarde'}`, 'danger');
+      }
+    });
   }
 
   irAlHistorial() {

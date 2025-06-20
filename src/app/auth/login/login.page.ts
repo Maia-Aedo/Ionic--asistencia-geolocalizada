@@ -12,6 +12,8 @@ import { Router } from '@angular/router';
 })
 
 export class LoginPage {
+  showPassword: boolean = false;
+
   credentials = {
     email: '',
     password: ''
@@ -64,6 +66,10 @@ export class LoginPage {
       });
       toast.present();
     }
+  }
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 
   // Redirije a registro
