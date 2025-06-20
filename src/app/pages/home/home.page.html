@@ -1,9 +1,9 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-title>Registrar Asistencia</ion-title>
+    <ion-title>Asistencia</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="logout()" color="light">
-        <ion-icon name="log-out-outline" slot="icon-only"></ion-icon>
+      <ion-button (click)="logout()" fill="clear" color="light">
+        <ion-icon slot="icon-only" name="exit-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -11,47 +11,52 @@
 
 <ion-content class="ion-padding">
 
-  <!-- Icono de calendario -->
-  <div class="centered-icon">
-    <ion-icon name="calendar-outline" size="large" color="primary"></ion-icon>
-  </div>
-
-  <!-- Instrucciones -->
-  <ion-text color="medium">
-    <h2 class="ion-text-center">Seleccioná una acción</h2>
-    <p class="ion-text-center">
-      Asegúrate de estar dentro de la zona de trabajo y permitir acceso a la cámara y geolocalización.
-    </p>
-  </ion-text>
+  <!-- Sección de Bienvenida -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title class="ion-text-center">
+        <ion-icon name="person-circle-outline" size="large" color="primary"></ion-icon>
+        <div>¡Bienvenido!</div>
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content class="ion-text-center">
+      Asegúrate de estar en una ubicación válida y tener activados los permisos necesarios.
+    </ion-card-content>
+  </ion-card>
 
   <!-- Botones de acción -->
-  <div class="action-buttons">
-    <ion-button expand="block" color="success" (click)="registrarAsistencia('entrada')">
-      <ion-icon name="log-in-outline" slot="start"></ion-icon>
-      Registrar Entrada
-    </ion-button>
-
-    <ion-button expand="block" color="danger" (click)="registrarAsistencia('salida')">
-      <ion-icon name="log-out-outline" slot="start"></ion-icon>
-      Registrar Salida
-    </ion-button>
-  </div>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-md="6">
+        <ion-button expand="block" color="success" shape="round" (click)="registrarAsistencia('entrada')">
+          <ion-icon slot="start" name="log-in-outline"></ion-icon>
+          Entrada
+        </ion-button>
+      </ion-col>
+      <ion-col size="12" size-md="6">
+        <ion-button expand="block" color="danger" shape="round" (click)="registrarAsistencia('salida')">
+          <ion-icon slot="start" name="log-out-outline"></ion-icon>
+          Salida
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
   <!-- Mensaje de éxito -->
-  <div *ngIf="mensajeExito" class="mensaje-exito ion-text-center">
-    <ion-text color="success">
+  <ion-card *ngIf="mensajeExito" color="success" class="ion-text-center">
+    <ion-card-content>
+      <ion-icon name="checkmark-circle-outline" size="large"></ion-icon>
       <h3>¡Asistencia registrada con éxito!</h3>
-    </ion-text>
-    <ion-button color="primary" (click)="irAlHistorial()">
-      Ver Historial
-    </ion-button>
-  </div>
+      <ion-button expand="block" fill="solid" color="primary" (click)="irAlHistorial()">
+        Ver Historial
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
 
-  <!-- Nota final -->
-  <ion-text color="medium">
-    <p class="ion-text-center note">
-      Tu ubicación y una foto serán requeridas para validar tu asistencia.
-    </p>
-  </ion-text>
+  <!-- Nota informativa -->
+  <div class="footer-note ion-text-center">
+    <ion-icon name="information-circle-outline" color="medium"></ion-icon>
+    <p>Tu ubicación y una foto serán requeridas para validar tu asistencia.</p>
+  </div>
 
 </ion-content>
