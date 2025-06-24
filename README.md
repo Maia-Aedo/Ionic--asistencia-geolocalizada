@@ -50,4 +50,4 @@ Aplicación móvil desarrollada con **Ionic + Angular**, que permite a usuarios 
 ## 📎 Adjuntos
 
 - [Documento Técnico](https://docs.google.com/document/d/1KverDAb9s7zrpLnXpvA4gJDSX-cWW1K110fRYb3LRr8/edit?usp=sharing)
-- [Vídeo Tutorial]()
+- [Vídeo Tutorial](https://youtu.be/jYvMSJdJj4w?si=ORMakFt0JU3i92oS)
